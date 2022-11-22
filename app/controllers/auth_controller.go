@@ -110,7 +110,7 @@ func (ac AuthController) SignupHandler(c *gin.Context) {
 	}
 	user, err := ac.userRepository.CreateUser(newUser)
 	if err != nil {
-		log.Fatalf("Error creating User: %v", err)
+		log.Panicf("Error creating User: %v", err)
 		c.JSON(http.StatusBadRequest, gin.H{
 			"success": false,
 			"error":   "Something went wrong, Try again later",

@@ -95,7 +95,6 @@ func NewDatabase(configEnv config.Config) Database {
 		dbCred = getDatabaseCred(configEnv.DatabaseUrl)
 	}
 
-	// "gorm:gorm@tcp(localhost:9910)/gorm?charset=utf8&parseTime=True&loc=Local"
 	dbUrl := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8&parseTime=True",
 		dbCred.DBUsername, dbCred.DBPassword, dbCred.DBHost, dbCred.DBPort, dbCred.DBName)
 

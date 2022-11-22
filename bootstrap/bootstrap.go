@@ -44,7 +44,7 @@ func Start(
 				routes.Setup()
 				err := handler.Run(":" + configEnv.ServerPort)
 				if err != nil {
-					log.Fatal("Error running server.")
+					log.Panic("Error running server.")
 				}
 
 			}()

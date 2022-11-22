@@ -40,12 +40,12 @@ func NewJWTMiddleware(
 	})
 
 	if err != nil {
-		log.Fatal("JWT Error:" + err.Error())
+		log.Panic("JWT Error:" + err.Error())
 	}
 
 	errInit := authMiddleware.MiddlewareInit()
 	if errInit != nil {
-		log.Fatal("authMiddleware.MiddlewareInit() Error:" + errInit.Error())
+		log.Panic("authMiddleware.MiddlewareInit() Error:" + errInit.Error())
 	}
 
 	return JWTMiddleware{

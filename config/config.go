@@ -66,7 +66,7 @@ func (c *Config) PopulateFieldsForProduction() {
 		//populate config struct
 		err := populate(v, os.Getenv(k))
 		if err != nil {
-			log.Fatal("error populating config struct field", err)
+			log.Panic("error populating config struct field", err)
 		}
 	}
 
@@ -87,12 +87,12 @@ func LoadConfig() Config {
 
 		err := viper.ReadInConfig()
 		if err != nil {
-			log.Fatal(err, viper.ConfigFileUsed())
+			log.Panic(err, viper.ConfigFileUsed())
 		}
 		//unmarshal env to cinfig struct
 		err = viper.Unmarshal(&config)
 		if err != nil {
-			log.Fatal("environment cant be loaded: ", err)
+			log.Panic("environment cant be loaded: ", err)
 		}
 	} else {
 		//we are in production, do not use .env, use the OS' environment variables
