@@ -95,8 +95,9 @@ func NewDatabase(configEnv config.Config) Database {
 		dbCred = getDatabaseCred(configEnv.DatabaseUrl)
 	}
 
-	dbUrl := fmt.Sprintf("host=%v port=%v user=%v dbname=%v password=%v sslmode=%v",
-		dbCred.DBHost, dbCred.DBPort, dbCred.DBUsername, dbCred.DBName, dbCred.DBPassword, dbCred.SSLMode)
+	// "gorm:gorm@tcp(localhost:9910)/gorm?charset=utf8&parseTime=True&loc=Local"
+	dbUrl := fmt.Sprintf("%v:%v/@tcp(%v:%v)/%v",
+		dbCred.DBUsername, dbCred.DBPassword, dbCred.DBHost, dbCred.DBPort, dbCred.DBName)
 
 	db, err := gorm.Open(mysql.Open(dbUrl), &gorm.Config{Logger: newLogger})
 	if err != nil {

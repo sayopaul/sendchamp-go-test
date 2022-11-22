@@ -23,6 +23,13 @@ type login struct {
 	Password string `json:"password" binding:"required"`
 }
 
+func NewAuthController(userRepository repositories.UserRepository, jwtMiddleware middlewares.JWTMiddleware) AuthController {
+	return AuthController{
+		userRepository: userRepository,
+		jwtMiddleware:  jwtMiddleware,
+	}
+}
+
 func (ac AuthController) SignInHandler(c *gin.Context) {
 	// validate sign in details
 	var signInDetails login
