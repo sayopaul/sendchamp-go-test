@@ -17,18 +17,20 @@ type TaskRoutes struct {
 func NewTaskRoutes(
 	handler infrastructure.Router,
 	taskController controllers.TaskController,
+	jwtMiddleware middlewares.JWTMiddleware,
 ) TaskRoutes {
 	return TaskRoutes{
 		handler:        handler,
 		taskController: taskController,
+		jwtMiddleware:  jwtMiddleware,
 	}
 }
 
 func (tr TaskRoutes) Setup() {
 	log.Println("Setting up Tasks routes")
-	task := tr.handler.Group("/task")
 	// use JWT auth middleware for all task related routes
 	authMiddleware := tr.jwtMiddleware.GinJWTMiddleware
+	task := tr.handler.Group("/task")
 	task.Use(authMiddleware.MiddlewareFunc())
 	{
 		task.POST("/create", tr.taskController.CreateTask)

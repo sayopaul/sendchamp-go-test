@@ -2,7 +2,6 @@ package services
 
 import (
 	"encoding/json"
-	"fmt"
 	"log"
 
 	"github.com/sayopaul/sendchamp-go-test/config"
@@ -24,17 +23,15 @@ func NewQueueService(configEnv config.Config) QueueService {
 		configEnv: configEnv,
 	}
 }
-func (qr QueueService) NewQueue(configEnv config.Config) Queue {
+func (qr QueueService) NewQueue(configEnv config.Config) *Queue {
 	conn, err := amqp.Dial(configEnv.AMQPUrl)
-	fmt.Println(conn)
 	if err != nil {
 		log.Panicf("%s: %s", "Failed to connect to RabbitMQ", err)
-		fmt.Printf("%s: %s", "Failed to connect to RabbitMQ", err)
 	}
 
 	ch, err := conn.Channel()
 	if err != nil {
-		log.Printf("%s: %s", "Failed to open a channel", err)
+		log.Panicf("%s: %s", "Failed to open a channel", err)
 	}
 
 	q, err := ch.QueueDeclare(
@@ -67,14 +64,15 @@ func (qr QueueService) NewQueue(configEnv config.Config) Queue {
 		log.Panicf("%s: %s", "Failed to bind the exchange and queue", err)
 	}
 
-	return Queue{
+	return &Queue{
 		Conn:         conn,
 		Channel:      ch,
 		Name:         q.Name,
 		ExchangeName: configEnv.ExchangeName,
 	}
 }
-func (qr *QueueService) PublishMessage(message entities.JsonStringer, configEnv config.Config) error {
+
+func (qr *QueueService) PublishMessage(message map[string]interface{}, configEnv config.Config) error {
 	queue := qr.NewQueue(configEnv)
 	toJson, _ := json.Marshal(message)
 

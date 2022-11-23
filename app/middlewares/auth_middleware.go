@@ -26,8 +26,7 @@ func NewJWTMiddleware(
 		PayloadFunc: func(data interface{}) jwt.MapClaims {
 			if user, ok := data.(models.User); ok {
 				return jwt.MapClaims{
-					"id":   user.ID,
-					"uuid": user.UUID,
+					"id": user.ID,
 				}
 			}
 			return jwt.MapClaims{}

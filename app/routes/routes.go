@@ -6,6 +6,7 @@ import (
 
 var Bootstrap = fx.Options(
 	fx.Provide(NewAuthRoutes),
+	fx.Provide(NewTaskRoutes),
 	fx.Provide(NewRoutes),
 )
 
