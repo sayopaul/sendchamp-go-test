@@ -76,7 +76,7 @@ func (qr *QueueService) PublishMessage(message map[string]interface{}, configEnv
 	queue := qr.NewQueue(configEnv)
 	toJson, _ := json.Marshal(message)
 
-	output := queue.Channel.Publish(
+	err := queue.Channel.Publish(
 		queue.ExchangeName, // exchange
 		"",                 // routing key
 		false,              // mandatory
@@ -87,6 +87,6 @@ func (qr *QueueService) PublishMessage(message map[string]interface{}, configEnv
 		})
 	defer queue.Conn.Close()
 	defer queue.Channel.Close()
-	return output
+	return err
 
 }

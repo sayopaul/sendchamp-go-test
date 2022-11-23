@@ -1,17 +1,22 @@
 package controllers
 
 import (
+	"log"
 	"net/http"
 
 	jwt "github.com/appleboy/gin-jwt/v2"
 	"github.com/gin-gonic/gin"
+	"github.com/sayopaul/sendchamp-go-test/config"
 	"github.com/sayopaul/sendchamp-go-test/models"
 	"github.com/sayopaul/sendchamp-go-test/repositories"
+	"github.com/sayopaul/sendchamp-go-test/services"
 )
 
 type TaskController struct {
 	userRepository repositories.UserRepository
 	taskRepository repositories.TaskRepository
+	queueService   services.QueueService
+	configEnv      config.Config
 }
 
 type createTaskInfo struct {
@@ -26,10 +31,12 @@ type updateTaskInfo struct {
 	Status      string `json:"status"`
 }
 
-func NewTaskController(userRepository repositories.UserRepository, taskRepository repositories.TaskRepository) TaskController {
+func NewTaskController(userRepository repositories.UserRepository, taskRepository repositories.TaskRepository, queueService services.QueueService, configEnv config.Config) TaskController {
 	return TaskController{
 		userRepository: userRepository,
 		taskRepository: taskRepository,
+		queueService:   queueService,
+		configEnv:      configEnv,
 	}
 }
 
@@ -42,6 +49,18 @@ func (tc TaskController) CreateTask(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"success": false,
 			"message": err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
+	//publish to queue (rabbitMQ instance)
+	errp := tc.publishTask(createTask)
+	if errp != nil {
+		log.Panic(errp.Error())
+		c.JSON(http.StatusBadRequest, gin.H{
+			"success": false,
+			"message": errp.Error(),
 			"data":    nil,
 		})
 		return
@@ -70,6 +89,14 @@ func (tc TaskController) CreateTask(c *gin.Context) {
 		},
 	})
 
+}
+
+func (tc TaskController) publishTask(task createTaskInfo) error {
+	err := tc.queueService.PublishMessage(map[string]interface{}{
+		"task_name":   task.Name,
+		"description": task.Description,
+	}, tc.configEnv)
+	return err
 }
 
 func (tc TaskController) UpdateTask(c *gin.Context) {
