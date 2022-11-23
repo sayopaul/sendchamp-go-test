@@ -23,7 +23,7 @@ func NewQueueService(configEnv config.Config) QueueService {
 		configEnv: configEnv,
 	}
 }
-func (qr QueueService) NewQueue(configEnv config.Config) *Queue {
+func (qs QueueService) NewQueue(configEnv config.Config) *Queue {
 	conn, err := amqp.Dial(configEnv.AMQPUrl)
 	if err != nil {
 		log.Panicf("%s: %s", "Failed to connect to RabbitMQ", err)
@@ -72,8 +72,8 @@ func (qr QueueService) NewQueue(configEnv config.Config) *Queue {
 	}
 }
 
-func (qr *QueueService) PublishMessage(message map[string]interface{}, configEnv config.Config) error {
-	queue := qr.NewQueue(configEnv)
+func (qs *QueueService) PublishMessage(message map[string]interface{}, configEnv config.Config) error {
+	queue := qs.NewQueue(configEnv)
 	toJson, _ := json.Marshal(message)
 
 	err := queue.Channel.Publish(

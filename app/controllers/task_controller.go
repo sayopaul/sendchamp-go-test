@@ -16,6 +16,7 @@ type TaskController struct {
 	userRepository repositories.UserRepository
 	taskRepository repositories.TaskRepository
 	queueService   services.QueueService
+	socketService  services.SocketService
 	configEnv      config.Config
 }
 
@@ -31,11 +32,12 @@ type updateTaskInfo struct {
 	Status      string `json:"status"`
 }
 
-func NewTaskController(userRepository repositories.UserRepository, taskRepository repositories.TaskRepository, queueService services.QueueService, configEnv config.Config) TaskController {
+func NewTaskController(userRepository repositories.UserRepository, taskRepository repositories.TaskRepository, queueService services.QueueService, socketService services.SocketService, configEnv config.Config) TaskController {
 	return TaskController{
 		userRepository: userRepository,
 		taskRepository: taskRepository,
 		queueService:   queueService,
+		socketService:  socketService,
 		configEnv:      configEnv,
 	}
 }
@@ -81,6 +83,10 @@ func (tc TaskController) CreateTask(c *gin.Context) {
 		return
 	}
 
+	tc.socketService.Send(map[string]interface{}{
+		"task_name":   task.Name,
+		"description": task.Description,
+	})
 	c.JSON(http.StatusOK, gin.H{
 		"success": true,
 		"message": "Task was created succesfully.",
