@@ -29,8 +29,10 @@ func (ur UserRepository) CheckSignIn(email string, password string) (user models
 	return user, ur.db.DB.Where("email = ? AND password = ?", email, password).First(&user).Error
 }
 
-func (ur UserRepository) CreateUser(user models.User) (models.User, error) {
-	return user, ur.db.DB.Create(&user).Error
+func (ur UserRepository) CreateUser(u models.User) (user models.FetchUser, err error) {
+	err = ur.db.DB.Create(&u).Error
+	ur.db.DB.Model(&models.User{}).Where(models.User{ID: u.ID}).First(&user)
+	return user, err
 }
 
 func (ur UserRepository) UpdatePassword(user models.User, password string) error {

@@ -17,6 +17,14 @@ type User struct {
 	UpdatedAt  time.Time `gorm:"autoUpdateTime;not null"`
 }
 
+// to return a user in JSOn response and hide sensitive info like password, ID etc.
+type FetchUser struct {
+	UUID       string    `json:"UUID"`
+	Email      string    `json:"email"`
+	DateJoined time.Time `json:"date_joined"`
+	LastLogin  time.Time `json:"last_login"`
+}
+
 // BeforeCreate, run this before creating user
 func (user *User) BeforeCreate(tx *gorm.DB) (err error) {
 	user.UUID = uuid.NewString()
