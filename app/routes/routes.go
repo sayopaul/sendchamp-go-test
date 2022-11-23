@@ -20,9 +20,11 @@ type IRoute interface {
 // NewRoutes sets up routes
 func NewRoutes(
 	authRoutes AuthRoutes,
+	taskRoutes TaskRoutes,
 ) Routes {
 	return Routes{
 		authRoutes,
+		taskRoutes,
 	}
 }
 

@@ -10,6 +10,7 @@ import (
 	"github.com/sayopaul/sendchamp-go-test/config"
 	"github.com/sayopaul/sendchamp-go-test/infrastructure"
 	"github.com/sayopaul/sendchamp-go-test/repositories"
+	"github.com/sayopaul/sendchamp-go-test/services"
 	"go.uber.org/fx"
 )
 
@@ -19,6 +20,7 @@ var Bootstrap = fx.Options(
 	middlewares.Bootstrap,
 	controllers.Bootstrap,
 	routes.Bootstrap,
+	services.Bootstrap,
 	fx.Provide(config.LoadConfig),
 	fx.Provide(infrastructure.NewDatabase),
 	fx.Provide(infrastructure.NewRouter),

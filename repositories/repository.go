@@ -6,4 +6,5 @@ import (
 
 var Bootstrap = fx.Options(
 	fx.Provide(NewUserRepository),
+	fx.Provide(NewTaskRepository),
 )

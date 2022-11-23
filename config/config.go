@@ -11,18 +11,20 @@ import (
 )
 
 type Config struct {
-	Debug       string `mapstructure:"DEBUG"`
-	ServerPort  string `mapstructure:"SERVER_PORT"`
-	Environment string `mapstructure:"ENVIRONMENT"`
-	DBUsername  string `mapstructure:"DB_USERNAME"`
-	DBPassword  string `mapstructure:"DB_PASSWORD"`
-	DBSslMode   string `mapstructure:"DB_SSL_MODE"`
-	DBHost      string `mapstructure:"DB_HOST"`
-	DBPort      string `mapstructure:"DB_PORT"`
-	DBName      string `mapstructure:"DB_NAME"`
-	DatabaseUrl string `mapstructure:"DATABASE_URL"`
-	JWTSecret   string `mapstructure:"JWT_SECRET"`
-	AMQPUrl     string `mapstructure:"AMQP_URL"`
+	Debug        string `mapstructure:"DEBUG"`
+	ServerPort   string `mapstructure:"SERVER_PORT"`
+	Environment  string `mapstructure:"ENVIRONMENT"`
+	DBUsername   string `mapstructure:"DB_USERNAME"`
+	DBPassword   string `mapstructure:"DB_PASSWORD"`
+	DBSslMode    string `mapstructure:"DB_SSL_MODE"`
+	DBHost       string `mapstructure:"DB_HOST"`
+	DBPort       string `mapstructure:"DB_PORT"`
+	DBName       string `mapstructure:"DB_NAME"`
+	DatabaseUrl  string `mapstructure:"DATABASE_URL"`
+	JWTSecret    string `mapstructure:"JWT_SECRET"`
+	AMQPUrl      string `mapstructure:"AMQP_URL"`
+	QueueName    string `mapstructure:"QUEUE_NAME"`
+	ExchangeName string `mapstructure:"EXCHANGE_NAME"`
 }
 
 func populate(v reflect.Value, value string) error {

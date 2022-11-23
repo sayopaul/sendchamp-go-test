@@ -109,6 +109,7 @@ func NewDatabase(configEnv config.Config) Database {
 	//automigrate tables
 	err = db.AutoMigrate(
 		&models.User{},
+		&models.Task{},
 	)
 	if err != nil {
 		log.Panic(err)
