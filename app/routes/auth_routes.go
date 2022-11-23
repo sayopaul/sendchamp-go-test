@@ -26,7 +26,7 @@ func (ar AuthRoutes) Setup() {
 	log.Println("Setting up Auth routes")
 	auth := ar.handler.Group("/auth")
 	{
-		auth.POST("/login", ar.authController.SignInHandler)
+		auth.POST("/signin", ar.authController.SignInHandler)
 		auth.POST("/signup", ar.authController.SignupHandler)
 	}
 }
