@@ -82,7 +82,7 @@ func (tc TaskController) CreateTask(c *gin.Context) {
 		})
 		return
 	}
-
+	//publish event to server via sockets
 	tc.socketService.Send(map[string]interface{}{
 		"task_name":   task.Name,
 		"description": task.Description,

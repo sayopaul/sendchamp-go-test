@@ -2,6 +2,7 @@ package services
 
 import (
 	"bufio"
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -31,12 +32,18 @@ func (ss SocketService) Send(message map[string]interface{}) {
 		fmt.Println("Error connecting:", err.Error())
 		os.Exit(1)
 	}
+	//close the connection when not in use
+	defer conn.Close()
 	//marshal to json
 	toJson, _ := json.Marshal(message)
-	//write message to connection
-	conn.Write([]byte(toJson))
+	byteMessage := bytes.NewReader(toJson)
+	reader := bufio.NewReader(byteMessage)
 	// run loop forever, until the econnection is exited
 	for {
+		// Read in input until newline, Enter key.
+		input, _ := reader.ReadString('\n')
+		//write message to connection
+		conn.Write([]byte(input))
 		// Listen for response from server
 		message, _ := bufio.NewReader(conn).ReadString('\n')
 		// Print server response.
